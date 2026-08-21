@@ -16,29 +16,51 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
-        python-version: '3.10'
+        python-version: '3.12'
+
+    - name: Debug - list files
+      run: ls -la
 
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install requests
 
+    - name: Decode monitor script
+      run: |
+        if [ -f monitor_issues_encoded.txt ]; then
+          base64 -d monitor_issues_encoded.txt > monitor_issues.py
+          chmod +x monitor_issues.py
+          echo "✅ Decoded monitor script"
+        else
+          echo "⚠️  File not found, skipping monitor"
+          exit 0
+        fi
+
     - name: Run Monitor
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        TARGET_REPO: Meren-rodrigo/Support
+        TARGET_REPO: ${{ github.repository }}
       run: |
-        python monitor_issues.py
+        if [ -f monitor_issues.py ]; then
+          python monitor_issues.py
+        else
+          echo "⚠️  monitor_issues.py not available"
+        fi
+
+    - name: Cleanup decoded file
+      if: always()
+      run: rm -f monitor_issues.py
 
     - name: Commit tracking files
       run: |
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
-        git add processed_issues.json last_check_time.json safety_tracking.json || echo "No files to add"
-        git commit -m "Update tracking [skip ci]" || echo "No changes to commit"
-        git push || echo "Push failed"
+        git add processed_issues.json last_check_time.json safety_tracking.json 2>/dev/null || true
+        git diff --cached --quiet || git commit -m "Update tracking [skip ci]"
+        git push 2>/dev/null || true
