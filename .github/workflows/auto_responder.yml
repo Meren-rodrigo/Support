@@ -3,39 +3,38 @@ name: Auto Responder
 on:
   schedule:
     - cron: '*/5 * * * *'
-  
   workflow_dispatch:
 
 jobs:
   respond:
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    
+
     permissions:
       contents: write
       issues: write
-    
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
-    
+
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: '3.10'
-    
+
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install requests
-    
+
     - name: Run Auto Responder
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        TARGET_REPO: viriyerse2/Support
+        TARGET_REPO: yourusername/Support
       run: |
         python auto_responder.py
-    
+
     - name: Commit responded issues tracking
       run: |
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
