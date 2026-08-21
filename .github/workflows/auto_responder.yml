@@ -16,12 +16,15 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
-        python-version: '3.10'
+        python-version: '3.12'
+
+    - name: Debug - list files
+      run: ls -la
 
     - name: Install dependencies
       run: |
@@ -31,7 +34,7 @@ jobs:
     - name: Run Auto Responder
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        TARGET_REPO: Meren-rodrigo/Support
+        TARGET_REPO: ${{ github.repository }}
       run: |
         python auto_responder.py
 
@@ -39,6 +42,6 @@ jobs:
       run: |
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
-        git add responded_issues.json || echo "No file to add"
-        git commit -m "Update responded issues [skip ci]" || echo "No changes"
-        git push || echo "Push failed"
+        git add responded_issues.json 2>/dev/null || true
+        git diff --cached --quiet || git commit -m "Update responded issues [skip ci]"
+        git push 2>/dev/null || true
