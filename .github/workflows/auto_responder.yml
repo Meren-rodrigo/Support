@@ -38,10 +38,11 @@ jobs:
       run: |
         python auto_responder.py
 
-    - name: Commit responded issues tracking
+    - name: Debug - check files
       run: |
-        git config --local user.email "github-actions[bot]@users.noreply.github.com"
-        git config --local user.name "github-actions[bot]"
-        git add responded_issues.json 2>/dev/null || true
-        git diff --cached --quiet || git commit -m "Update responded issues [skip ci]"
-        git push 2>/dev/null || true
+        echo "=== Files in repo ==="
+        ls -la
+        echo "=== bot_responses.json exists? ==="
+        test -f bot_responses.json && echo "YES" || echo "NO"
+        echo "=== responded_issues.json exists? ==="
+        test -f responded_issues.json && echo "YES" || echo "NO"
