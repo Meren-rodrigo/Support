@@ -28,22 +28,12 @@ jobs:
         python -m pip install --upgrade pip
         pip install requests
 
-    - name: Decode monitor script
-      run: |
-        base64 -d monitor_issues_encoded.txt > monitor_issues.py
-        chmod +x monitor_issues.py
-
     - name: Run Monitor
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         TARGET_REPO: Meren-rodrigo/Support
       run: |
         python monitor_issues.py
-
-    - name: Cleanup decoded file
-      if: always()
-      run: |
-        rm -f monitor_issues.py
 
     - name: Commit tracking files
       run: |
