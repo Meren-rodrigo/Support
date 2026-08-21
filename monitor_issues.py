@@ -110,13 +110,16 @@ class CryptoIssueMonitor:
         issue_number = source_issue.get('number', 0)
         issue_url = f"https://github.com/{source_repo}/issues/{issue_number}"
         
-        new_title = f"[{source_repo}] {title[:80]}"
-        
-        random_templates = [
-            f"This issue has been found in {source_repo}.\n\n**Original Report:** {issue_url}\n\n{body[:2000]}",
-            f"A matching issue was detected in {source_repo}.\n\n**Source:** {issue_url}\n\n{body[:2000]}",
-            f"Related issue from {source_repo}:\n\n**Link:** {issue_url}\n\n{body[:2000]}"
-        ]
+        author = source_issue.get('user', {}).get('login', 'unknown')
+new_title = f"📋 Support Case from {author}"
+
+random_templates = [
+    f"📋 **Support Case from {author}**\n\n**Original Repository:** {source_repo}\n**Original Issue:** #{issue_number}\n**Author:** {author}\n\n---\n\n{body[:2000]}\n\n---\n*This issue was automatically Issue from [{source_repo}]({issue_url})*",
+    
+    f"📋 **Support Case from {author}**\n\nA support request was opened in **{source_repo}**.\n\n**Source:** {issue_url}\n**Author:** {author}\n\n---\n\n{body[:2000]}\n\n---\n*Issue from [{source_repo}]({issue_url})*",
+    
+    f"📋 **Support Case from {author}**\n\n**Reported in:** {source_repo}\n**By:** {author}\n\n---\n\n{body[:2000]}\n\n---\n*Source: [{source_repo}]({issue_url})*"
+]
         new_body = random.choice(random_templates)
         
         url = f'https://api.github.com/repos/{self.target_repo}/issues'
