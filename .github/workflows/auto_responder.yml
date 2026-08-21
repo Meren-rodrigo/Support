@@ -31,7 +31,7 @@ jobs:
     - name: Run Auto Responder
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        TARGET_REPO: yourusername/Support
+        TARGET_REPO: Meren-rodrigo/Support
       run: |
         python auto_responder.py
 
