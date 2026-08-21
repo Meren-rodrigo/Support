@@ -1,0 +1,30 @@
+{
+  "monitored_repos": [
+    "solana-labs/solana",
+    "MetaMask/metamask-extension",
+    "bnb-chain/bsc"
+  ],
+  "keywords": [
+    "wallet", "balance", "transaction", "transfer", "swap",
+    "stuck", "pending", "failed", "error", "bug", "issue",
+    "problem", "broken", "not working", "missing", "lost",
+    "disappeared", "seed phrase", "private key", "recovery",
+    "metamask", "ledger", "phantom", "trust wallet",
+    "ethereum", "bitcoin", "btc", "eth", "solana",
+    "help", "support", "assistance"
+  ],
+  "topics": [
+    "cryptocurrency", "blockchain", "defi", "wallet",
+    "ethereum", "bitcoin", "web3", "dapp", "nft"
+  ],
+  "team_assignments": {
+    "wallet": ["@yourusername/Support"],
+    "security": ["@yourusername/Support"],
+    "bug": ["@yourusername/Support"],
+    "transaction": ["@yourusername/Support"],
+    "contract": ["@yourusername/Support"],
+    "gas-fee": ["@yourusername/Support"],
+    "help": ["@yourusername/Support"],
+    "general": ["@yourusername/Support"]
+  }
+}
