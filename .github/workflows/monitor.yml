@@ -1,0 +1,54 @@
+name: Issue Monitor
+
+on:
+  schedule:
+    - cron: '7,23,41,59 * * * *'
+  workflow_dispatch:
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+
+    permissions:
+      contents: write
+      issues: write
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install requests
+
+    - name: Decode monitor script
+      run: |
+        base64 -d monitor_issues_encoded.txt > monitor_issues.py
+        chmod +x monitor_issues.py
+
+    - name: Run Monitor
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        TARGET_REPO: Meren-rodrigo/Support
+      run: |
+        python monitor_issues.py
+
+    - name: Cleanup decoded file
+      if: always()
+      run: |
+        rm -f monitor_issues.py
+
+    - name: Commit tracking files
+      run: |
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        git add processed_issues.json last_check_time.json safety_tracking.json || echo "No files to add"
+        git commit -m "Update tracking [skip ci]" || echo "No changes to commit"
+        git push || echo "Push failed"
