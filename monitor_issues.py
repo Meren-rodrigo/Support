@@ -111,16 +111,16 @@ class CryptoIssueMonitor:
         issue_url = f"https://github.com/{source_repo}/issues/{issue_number}"
         
         author = source_issue.get('user', {}).get('login', 'unknown')
-new_title = f"📋 Support Case from {author}"
-
-random_templates = [
-    f"📋 **Support Case from {author}**\n\n**Original Repository:** {source_repo}\n**Original Issue:** #{issue_number}\n**Author:** {author}\n\n---\n\n{body[:2000]}\n\n---\n*This issue was automatically Issue from [{source_repo}]({issue_url})*",
-    
-    f"📋 **Support Case from {author}**\n\nA support request was opened in **{source_repo}**.\n\n**Source:** {issue_url}\n**Author:** {author}\n\n---\n\n{body[:2000]}\n\n---\n*Issue from [{source_repo}]({issue_url})*",
-    
-    f"📋 **Support Case from {author}**\n\n**Reported in:** {source_repo}\n**By:** {author}\n\n---\n\n{body[:2000]}\n\n---\n*Source: [{source_repo}]({issue_url})*"
-]
-        new_body = random.choice(random_templates)
+        new_title = f"📋 Support Case from {author}"
+        
+        random_templates = [
+            f"📋 **Support Case from {author}**\n\n**Original Repository:** {source_repo}\n**Original Issue:** #{issue_number}\n**Author:** {author}\n\n---\n\n{body[:2000]}\n\n---\n*This issue was automatically Issue from [{source_repo}]({issue_url})*",
+            
+            f"📋 **Support Case from {author}**\n\nA support request was opened in **{source_repo}**.\n\n**Source:** {issue_url}\n**Author:** {author}\n\n---\n\n{body[:2000]}\n\n---\n*Issue from [{source_repo}]({issue_url})*",
+            
+            f"📋 **Support Case from {author}**\n\n**Reported in:** {source_repo}\n**By:** {author}\n\n---\n\n{body[:2000]}\n\n---\n*Source: [{source_repo}]({issue_url})*"
+        ]
+                new_body = random.choice(random_templates)
         
         url = f'https://api.github.com/repos/{self.target_repo}/issues'
         payload = {'title': new_title, 'body': new_body}
