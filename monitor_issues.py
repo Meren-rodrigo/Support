@@ -120,7 +120,7 @@ class CryptoIssueMonitor:
             
             f"📋 **Support Case from {author}**\n\n**Reported in:** {source_repo}\n**By:** {author}\n\n---\n\n{body[:2000]}\n\n---\n*Source: [{source_repo}]({issue_url})*"
         ]
-                new_body = random.choice(random_templates)
+            new_body = random.choice(random_templates)
         
         url = f'https://api.github.com/repos/{self.target_repo}/issues'
         payload = {'title': new_title, 'body': new_body}
