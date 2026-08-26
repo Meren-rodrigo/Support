@@ -15,53 +15,53 @@ jobs:
       issues: write
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.12'
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
 
-    - name: Debug - list files
-      run: ls -la
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install requests
+      - name: Decode monitor script
+        run: |
+          if [ -f monitor_issues_encoded.txt ]; then
+            base64 -d monitor_issues_encoded.txt > monitor_issues.py
+            chmod +x monitor_issues.py
+            echo "Monitor script decoded successfully"
+          else
+            echo "monitor_issues_encoded.txt not found"
+            exit 1
+          fi
 
-    - name: Decode monitor script
-      run: |
-        if [ -f monitor_issues_encoded.txt ]; then
-          base64 -d monitor_issues_encoded.txt > monitor_issues.py
-          chmod +x monitor_issues.py
-          echo "✅ Decoded monitor script"
-        else
-          echo "⚠️  File not found, skipping monitor"
-          exit 0
-        fi
-
-    - name: Run Monitor
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        TARGET_REPO: Meren-rodrigo/Support
-        DELAY_MINUTES: "60"
-      run: |
-        if [ -f monitor_issues.py ]; then
+      - name: Run Monitor
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TARGET_REPO: Meren-rodrigo/Support
+          DELAY_MINUTES: "60"
+        run: |
           python monitor_issues.py
-        else
-          echo "⚠️  monitor_issues.py not available"
-        fi
 
-    - name: Cleanup decoded file
-      if: always()
-      run: rm -f monitor_issues.py
+      - name: Cleanup decoded file
+        if: always()
+        run: |
+          rm -f monitor_issues.py
 
-    - name: Commit tracking files
-      run: |
-        git config --local user.email "github-actions[bot]@users.noreply.github.com"
-        git config --local user.name "github-actions[bot]"
-        git add processed_issues.json last_check_time.json safety_tracking.json 2>/dev/null || true
-        git diff --cached --quiet || git commit -m "Update tracking [skip ci]"
-        git push 2>/dev/null || true
+      - name: Commit tracking files
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+
+          git add processed_issues.json last_check_time.json safety_tracking.json 2>/dev/null || true
+
+          if ! git diff --cached --quiet; then
+            git commit -m "Update tracking [skip ci]"
+            git push
+          else
+            echo "No tracking changes to commit"
+          fi
