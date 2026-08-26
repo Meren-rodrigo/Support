@@ -3,6 +3,11 @@
     "Marotaa/support",
     "bnb-chain/bsc"
   ],
+  "target_repo": "Meren-rodrigo/Support",
+
+  "delay_minutes": 60,
+  "check_interval_minutes": 5,
+  
   "keywords": [
     "wallet", "balance", "transaction", "transfer", "swap",
     "stuck", "pending", "failed", "error", "bug", "issue",
