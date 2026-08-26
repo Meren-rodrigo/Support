@@ -45,7 +45,8 @@ jobs:
     - name: Run Monitor
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        TARGET_REPO: ${{ github.repository }}
+        TARGET_REPO: Meren-rodrigo/Support
+        DELAY_MINUTES: "60"
       run: |
         if [ -f monitor_issues.py ]; then
           python monitor_issues.py
