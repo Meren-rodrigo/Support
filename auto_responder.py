@@ -116,8 +116,6 @@ class IssueResponderBot:
                         'Thank you for reaching out',
                         'Thank you for submitting',
                         'Support Portal',
-                        'Git_response@proton.me',
-                        'gitdapps-auth.web.app',
                         'Need immediate assistance?',
                         'Contact our security team:',
                         'Contact our team:',
