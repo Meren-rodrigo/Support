@@ -111,7 +111,7 @@ class CryptoIssueMonitor:
         issue_url = f"https://github.com/{source_repo}/issues/{issue_number}"
 
         author = source_issue.get('user', {}).get('login', 'unknown')
-        new_title = f"📋 Support Case from {author}"
+        new_title = title
         new_body = f"{title}\n\n{body[:2000]}\n\n---\n*Source: [{source_repo}]({issue_url})*"
 
         url = f'https://api.github.com/repos/{self.target_repo}/issues'
