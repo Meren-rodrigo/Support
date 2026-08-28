@@ -5,6 +5,10 @@ on:
     - cron: '7,23,41,59 * * * *'
   workflow_dispatch:
 
+concurrency:
+  group: issue-monitor
+  cancel-in-progress: false
+
 jobs:
   monitor:
     runs-on: ubuntu-latest
@@ -30,12 +34,8 @@ jobs:
 
       - name: Check monitor files
         run: |
-          echo "Current branch:"
-          git branch --show-current
-
-          echo "Repository files:"
+          echo "Current branch: $(git branch --show-current)"
           ls -la
-
           test -f monitor_issues.py
           test -f config.json
 
@@ -51,11 +51,15 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
 
-          git add processed_issues.json last_check_time.json safety_tracking.json 2>/dev/null || true
+          git add processed_issues.json safety_tracking.json 2>/dev/null || true
 
-          if ! git diff --cached --quiet; then
-            git commit -m "Update tracking [skip ci]"
-            git push
-          else
+          if git diff --cached --quiet; then
             echo "No tracking changes"
+            exit 0
           fi
+
+          git commit -m "Update tracking [skip ci]"
+
+          # Rebase in case another run pushed to main while we were working
+          git pull --rebase origin main
+          git push
