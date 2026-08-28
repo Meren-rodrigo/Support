@@ -37,7 +37,6 @@ class CryptoIssueMonitor:
         self.last_date = self.safety_tracking.get('last_date', '')
         
         # Max limits per run
-        self.MAX_ISSUES_PER_RUN = 2
         self.MAX_ISSUES_PER_DAY = 10
     
     def load_config(self) -> Dict:
