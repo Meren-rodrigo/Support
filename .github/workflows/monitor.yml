@@ -2,7 +2,7 @@ name: Issue Monitor
 
 on:
   schedule:
-    - cron: '*/2 * * * *'
+    - cron: '*/5 * * * *'
   workflow_dispatch:
 
 jobs:
@@ -28,28 +28,23 @@ jobs:
           python -m pip install --upgrade pip
           pip install requests
 
-      - name: Check monitor script
+      - name: Check monitor files
         run: |
-          if [ -f monitor_issues.py ]; then
-            chmod +x monitor_issues.py
-            echo "Monitor script found"
-          else
-            echo "monitor_issues.py not found"
-            exit 1
-          fi
-  
+          echo "Current branch:"
+          git branch --show-current
+
+          echo "Repository files:"
+          ls -la
+
+          test -f monitor_issues.py
+          test -f config.json
+
       - name: Run Monitor
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TARGET_REPO: Meren-rodrigo/Support
-          DELAY_MINUTES: "60"
         run: |
           python monitor_issues.py
-
-      - name: Cleanup decoded file
-        if: always()
-        run: |
-          rm -f monitor_issues.py
 
       - name: Commit tracking files
         run: |
@@ -62,5 +57,5 @@ jobs:
             git commit -m "Update tracking [skip ci]"
             git push
           else
-            echo "No tracking changes to commit"
+            echo "No tracking changes"
           fi
