@@ -2,7 +2,7 @@ name: Issue Monitor
 
 on:
   schedule:
-    - cron: '*/5 * * * *'
+    - cron: '*/2 * * * *'
   workflow_dispatch:
 
 jobs:
