@@ -5,7 +5,6 @@
   ],
   "target_repo": "Meren-rodrigo/Support",
 
-  "delay_minutes": 60,
   "check_interval_minutes": 5,
   
   "keywords": [
