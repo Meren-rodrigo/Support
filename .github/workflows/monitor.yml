@@ -28,17 +28,16 @@ jobs:
           python -m pip install --upgrade pip
           pip install requests
 
-      - name: Decode monitor script
+      - name: Check monitor script
         run: |
-          if [ -f monitor_issues_encoded.txt ]; then
-            base64 -d monitor_issues_encoded.txt > monitor_issues.py
+          if [ -f monitor_issues.py ]; then
             chmod +x monitor_issues.py
-            echo "Monitor script decoded successfully"
+            echo "Monitor script found"
           else
-            echo "monitor_issues_encoded.txt not found"
+            echo "monitor_issues.py not found"
             exit 1
           fi
-
+  
       - name: Run Monitor
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
