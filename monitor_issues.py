@@ -156,8 +156,6 @@ class CryptoIssueMonitor:
         total_issues_created = 0
         
         for repo in repos:
-            if total_issues_created >= self.MAX_ISSUES_PER_RUN:
-                break
             if not self.can_create_issue():
                 break
             
@@ -222,7 +220,7 @@ class CryptoIssueMonitor:
         print(f"\n{'='*60}")
         print(f"📊 Summary:")
         print(f"   - Found: {total_issues_found}")
-        print(f"   - Created: {total_issues_created}/{self.MAX_ISSUES_PER_RUN}")
+        print(f"   - Created: {total_issues_created}")
         print(f"   - Daily: {self.daily_issues_created}/{self.MAX_ISSUES_PER_DAY}")
         print(f"{'='*60}\n")
 
